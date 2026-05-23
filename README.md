@@ -1,0 +1,1 @@
+This is a personal feed aggregator in CLI to compile all recent additions in the previous 2 weeks into your database from added feeds. This content is deleted 2 weeks later. It also includes textual ui.
