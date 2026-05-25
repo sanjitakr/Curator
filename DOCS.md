@@ -104,16 +104,9 @@ curator add-feed <url> <category> [name] [--type TYPE]
 **Examples**
 
 ```bash
-# arXiv — machine learning
 curator add-feed "https://rss.arxiv.org/rss/cs.LG" "AI" "ArXiv ML"
-
-# Chess blog
 curator add-feed "https://www.chess.com/rss/news" "CHESS" "Chess.com News"
-
-# YouTube channel
 curator add-feed "https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw" "MATHS" "3Blue1Brown" --type youtube
-
-# Podcast via direct RSS
 curator add-feed "https://feeds.simplecast.com/xyz" "PODCASTS" "My Podcast" --type podcast
 ```
 
