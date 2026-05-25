@@ -1,0 +1,20 @@
+[build-system]
+requires      = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name            = "curator-reader"
+version         = "1.0.0"
+description     = "Curator — personal terminal feed reader"
+requires-python = ">=3.11"
+dependencies    = [
+    "typer>=0.9",
+    "feedparser>=6.0",
+    "textual>=8.0",
+]
+
+[project.scripts]
+curator = "curator.main:app"
+
+[tool.setuptools.packages.find]
+where = ["."]
