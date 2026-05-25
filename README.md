@@ -31,9 +31,3 @@ curator add-feed "https://www.chess.com/rss/news" "CHESS" "Chess.com"
 curator fetch
 curator ui
 ```
-
----
-
-## License
-
-MIT — see [LICENSE](LICENSE)
