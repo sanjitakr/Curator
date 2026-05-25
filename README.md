@@ -156,14 +156,14 @@ Example output:
 ### `curator fetch`
 
 Fetch new articles from every enabled feed. Only content from the **past 2 weeks** is
-kept; anything older is automatically deleted.
+kept; anything older is automatically deleted. The deletion of old articles occurs when the fetch command is called.
 
 ```bash
 curator fetch
 ```
 
 Dismissed articles (via `mark-viewed`) will never reappear even if the feed still lists
-them.
+them. 
 
 ---
 

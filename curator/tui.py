@@ -21,7 +21,6 @@ from curator import database as db
 from curator import extract as fetcher
 
 
-# ── helpers ────────────────────────────────────────────────────────────────
 
 def _fmt_date(ts: float) -> str:
     if not ts:
@@ -30,16 +29,13 @@ def _fmt_date(ts: float) -> str:
 
 
 def _strip_markup(text: str) -> str:
-    """Remove [ ] characters that break Textual's markup parser."""
     return text.replace("[", "(").replace("]", ")")
 
 
 def _strip_html(text: str) -> str:
-    """Remove HTML tags from feed summaries."""
     return re.sub(r"<[^>]+>", "", text).strip()
 
 
-# ── Article detail modal ───────────────────────────────────────────────────
 
 class ArticleModal(ModalScreen):
     BINDINGS = [
@@ -53,8 +49,6 @@ class ArticleModal(ModalScreen):
 
     def compose(self) -> ComposeResult:
         a = self._article
-        # Fixed layout: header + meta + rule + scrollable summary + url + buttons
-        # Buttons are OUTSIDE the scroll area so they're always visible
         with Container(id="modal"):
             yield Label("ARTICLE", id="modal-hdr")
             yield Static(_strip_markup(a.get("title", "") or "—"), id="modal-title")
@@ -91,8 +85,6 @@ class ArticleModal(ModalScreen):
     @on(Button.Pressed, "#btn-close")
     def _on_close(self): self.dismiss(None)
 
-
-# ── Add feed modal ─────────────────────────────────────────────────────────
 
 class AddFeedModal(ModalScreen):
     BINDINGS = [Binding("escape", "dismiss_modal", "Cancel")]
@@ -131,7 +123,6 @@ class AddFeedModal(ModalScreen):
     def _on_cancel(self): self.dismiss(None)
 
 
-# ── Confirm modal ──────────────────────────────────────────────────────────
 
 class ConfirmModal(ModalScreen):
     def __init__(self, message: str):
@@ -154,8 +145,6 @@ class ConfirmModal(ModalScreen):
     def _on_no(self):  self.dismiss(False)
 
 
-# ── Main app ───────────────────────────────────────────────────────────────
-
 class CuratorApp(App):
 
     TITLE = "Curator"
@@ -163,12 +152,10 @@ class CuratorApp(App):
     CSS = """
     Screen { background: #141317; color: #d4cfa8; }
 
-    /* ── layout ── */
     #root  { layout: horizontal; height: 1fr; }
     #left  { width: 26; min-width: 20; layout: vertical; background: #1d1b21; border-right: tall #3c3840; }
     #right { width: 1fr; layout: vertical; }
 
-    /* ── sidebar ── */
     #app-title {
         height: 1; background: #61fa46; color: #141317;
         text-style: bold; text-align: center; padding: 0 1;
@@ -187,7 +174,6 @@ class CuratorApp(App):
     }
     #sidebar-btns Button:hover { background: #61fa46; color: #141317; }
 
-    /* ── articles / log pane ── */
     #pane-label {
         height: 1; background: #1d1b21; color: #b8fa70;
         text-style: bold; padding: 0 1; border-bottom: tall #3c3840;
@@ -198,7 +184,7 @@ class CuratorApp(App):
     DataTable > .datatable--hover  { background: #221f27; }
     #log { height: 1fr; background: #141317; border: none; display: none; }
 
-    /* ── bottom bar ── */
+
     #bottom {
         height: 2; layout: horizontal; background: #1d1b21;
         border-top: solid #3c3840; padding: 0 1;
@@ -212,7 +198,6 @@ class CuratorApp(App):
     #search > .input--placeholder { color: #504d54; }
     #status { color: #a89980; height: 1; width: 18; content-align: right middle; }
 
-    /* ── modals ── */
     ArticleModal, AddFeedModal, ConfirmModal { align: center middle; }
 
     #modal {
@@ -267,7 +252,6 @@ class CuratorApp(App):
         self._selected_source: Optional[str] = None
         self._log_visible:     bool = False
 
-    # ── compose ───────────────────────────────────────────────────────────
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -294,7 +278,6 @@ class CuratorApp(App):
         self._reload_sidebar()
         self._reload_articles()
 
-    # ── sidebar ───────────────────────────────────────────────────────────
 
     def _reload_sidebar(self):
         lv = self.query_one("#feed-list", ListView)
@@ -320,7 +303,6 @@ class CuratorApp(App):
                              "name": f["name"], "tag": f["tag"]}
                 lv.append(item)
 
-    # ── articles ──────────────────────────────────────────────────────────
 
     def _reload_articles(self, search: str = ""):
         t = self.query_one("#table", DataTable)
@@ -356,7 +338,6 @@ class CuratorApp(App):
         n = len(self._articles)
         self._set_status(f"{n} article{'s' if n != 1 else ''}")
 
-    # ── events ────────────────────────────────────────────────────────────
 
     @on(ListView.Selected, "#feed-list")
     def on_feed_select(self, event: ListView.Selected):
@@ -393,8 +374,6 @@ class CuratorApp(App):
     @on(Input.Changed, "#search")
     def on_search_change(self, event: Input.Changed):
         self._reload_articles(search=event.value.strip())
-
-    # ── actions ───────────────────────────────────────────────────────────
 
     def action_add_feed(self):
         self.push_screen(AddFeedModal(), self._after_add)
